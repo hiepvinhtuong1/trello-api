@@ -21,13 +21,10 @@ const createNew = async (req, res, next) => {
     })
 
     try {
-        await correctCondition.validateAsync(req.body, { abortEarly: false });
-        res.status(StatusCodes.CREATED).json({
-            message: 'Board created successfully'
-        });
-        next();
+        await correctCondition.validateAsync(req.body, { abortEarly: false })
+        //Validate dữ liệu thành công, tiếp tục xử lý
+        next()
     } catch (error) {
-        console.log(error);
         res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
             errors: new Error(error).message
         })
