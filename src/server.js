@@ -4,11 +4,12 @@ import express from 'express'
 import existHook from 'async-exit-hook'
 import { CONNECT_DB, CLOSE_DB } from './config/mongodb.js'
 import { env } from './config/environment.js'
+import { APIs_V1 } from '~/routes/v1'
 const START_SEVER = () => {
   const app = express()
 
-  app.get('/', async (req, res) => {
-  })
+  app.use('/v1', APIs_V1)
+
   app.listen(env.APP_PORT, env.APP_HOST, () => {
     // eslint-disable-next-line no-console
     console.log(`Hello ${env.AUTHOR}, I am running at ${env.APP_HOST}:${env.APP_HOST}/`)
