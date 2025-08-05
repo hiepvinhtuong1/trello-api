@@ -1,19 +1,25 @@
 /* eslint-disable no-console */
 
 import express from 'express'
-import {CONNECT_DB, GET_DB} from './config/mongodb.js'
-
+import existHook from 'async-exit-hook'
+import { CONNECT_DB, CLOSE_DB } from './config/mongodb.js'
+import { env } from './config/environment.js'
 const START_SEVER = () => {
   const app = express()
 
-  const hostname = 'localhost'
-  const port = 8017
   app.get('/', async (req, res) => {
-    console.log(await GET_DB().listCollections().toArray())
   })
-  app.listen(port, hostname, () => {
-  // eslint-disable-next-line no-console
-    console.log(`Hello Trung Quan Dev, I am running at ${ hostname }:${ port }/`)
+  app.listen(env.APP_PORT, env.APP_HOST, () => {
+    // eslint-disable-next-line no-console
+    console.log(`Hello ${env.AUTHOR}, I am running at ${env.APP_HOST}:${env.APP_HOST}/`)
+  })
+
+
+  // Thực hiện các tác vụ cleanup trước khi dừng server
+  existHook(() => {
+    console.log('4. Server is shutting down...')
+    CLOSE_DB()
+    console.log('5. Disconnected from MongoDB')
   })
 }
 
