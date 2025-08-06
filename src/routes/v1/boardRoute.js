@@ -1,7 +1,8 @@
-import express from 'express';
+/* eslint-disable indent */
+import express from 'express'
 import { StatusCodes } from 'http-status-codes';
-import { boardValidation } from '~/validations/boardValidation.js';
-import { boardController } from '~/controllers/boardController.js';
+import { boardValidation } from '~/validations/boardValidation.js'
+import { boardController } from '~/controllers/boardController.js'
 
 const Router = express.Router()
 
@@ -11,6 +12,10 @@ Router.route('/')
             message: 'Board API is running'
         })
     })
-    .post(boardValidation.createNew, boardController.createNew);
+    .post(boardValidation.createNew, boardController.createNew)
+
+Router.route('/:id')
+    .get(boardController.getDetails)
+    .put()
 
 export const boardRoutes = Router

@@ -11,5 +11,7 @@ export const env = {
   APP_HOST: process.env.APP_HOST || 'localhost',
   APP_PORT: process.env.APP_PORT || 8017,
 
-  AUTHOR : process.env.AUTHOR || 'TUANHIEPDEV'
+  BUILD_MODE: process.env.BUILD_MODE || 'dev', // dev | production
+
+  AUTHOR: process.env.AUTHOR || 'TUANHIEPDEV'
 }

@@ -5,12 +5,18 @@ import existHook from 'async-exit-hook'
 import { CONNECT_DB, CLOSE_DB } from './config/mongodb.js'
 import { env } from './config/environment.js'
 import { APIs_V1 } from '~/routes/v1'
+import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware.js'
+
 const START_SEVER = () => {
   const app = express()
 
   app.use(express.json())
 
   app.use('/v1', APIs_V1)
+
+
+  //Midleware xử lý lỗi tập chung
+  app.use(errorHandlingMiddleware)
 
   app.listen(env.APP_PORT, env.APP_HOST, () => {
     // eslint-disable-next-line no-console

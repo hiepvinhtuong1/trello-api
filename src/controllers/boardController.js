@@ -1,18 +1,35 @@
-import { StatusCodes } from 'http-status-codes'
+/* eslint-disable indent */
 
+import { StatusCodes } from 'http-status-codes'
+import { boardService } from '~/services/boardService.js'
 const createNew = async (req, res, next) => {
     try {
+
+        const createdBoard = await boardService.createNew(req.body)
+
         res.status(StatusCodes.CREATED).json({
-            message: 'Board created successfully',
-        });
+            createdBoard
+        })
     } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            erros: error.message
-        });
-        return;
+        next(error)
+    }
+}
+
+const getDetails = async (req, res, next) => {
+    try {
+        const boardId = req.params.id
+        console.log('Board ID:', typeof boardId);
+        const board = await boardService.getDetails(boardId)
+
+        res.status(StatusCodes.OK).json({
+            board
+        })
+    } catch (error) {
+        next(error)
     }
 }
 
 export const boardController = {
-    createNew
+    createNew,
+    getDetails
 }
