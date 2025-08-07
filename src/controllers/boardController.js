@@ -7,9 +7,9 @@ const createNew = async (req, res, next) => {
 
         const createdBoard = await boardService.createNew(req.body)
 
-        res.status(StatusCodes.CREATED).json({
+        res.status(StatusCodes.CREATED).json(
             createdBoard
-        })
+        )
     } catch (error) {
         next(error)
     }
@@ -18,12 +18,10 @@ const createNew = async (req, res, next) => {
 const getDetails = async (req, res, next) => {
     try {
         const boardId = req.params.id
-        console.log('Board ID:', typeof boardId);
         const board = await boardService.getDetails(boardId)
-
-        res.status(StatusCodes.OK).json({
+        res.status(StatusCodes.OK).json(
             board
-        })
+        )
     } catch (error) {
         next(error)
     }

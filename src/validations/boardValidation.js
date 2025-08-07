@@ -1,6 +1,9 @@
+/* eslint-disable indent */
+
 import Joi from 'joi';
 import { StatusCodes } from 'http-status-codes'
 import ApiError from '~/utils/ApiError.js'
+import { BOARD_TYPES } from '~/utils/constants';
 
 
 const createNew = async (req, res, next) => {
@@ -18,6 +21,10 @@ const createNew = async (req, res, next) => {
             'string.min': 'Description must be at least 3 characters long',
             'string.max': 'Description must not exceed 50 characters',
             'string.trim': 'Description cannot have leading or trailing spaces'
+        }),
+        type: Joi.string().valid(BOARD_TYPES.PUBLIC, BOARD_TYPES.PRIVATE).required().messages({
+            'any.required': 'Type is required',
+            'any.only': 'Type must be either public or private'
         })
     })
 
