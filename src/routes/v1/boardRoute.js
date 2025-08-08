@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import express from 'express'
-import { StatusCodes } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes'
 import { boardValidation } from '~/validations/boardValidation.js'
 import { boardController } from '~/controllers/boardController.js'
 
@@ -18,4 +18,4 @@ Router.route('/:id')
     .get(boardController.getDetails)
     .put()
 
-export const boardRoutes = Router
+export const boardRoute = Router
