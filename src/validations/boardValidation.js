@@ -4,7 +4,7 @@ import Joi from 'joi'
 import { StatusCodes } from 'http-status-codes'
 import ApiError from '~/utils/ApiError.js'
 import { BOARD_TYPES } from '~/utils/constants'
-
+import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
 
 const createNew = async (req, res, next) => {
     const correctCondition = Joi.object({
@@ -39,6 +39,55 @@ const createNew = async (req, res, next) => {
 
 }
 
+const update = async (req, res, next) => {
+    // Khi update thì không cần require cho các trường nữaa
+    const correctCondition = Joi.object({
+        title: Joi.string().min(3).max(50).trim().strict(),
+        description: Joi.string().min(3).max(50).trim().strict(),
+        type: Joi.string().valid(BOARD_TYPES.PUBLIC, BOARD_TYPES.PRIVATE),
+        columnOrderIds: Joi.array().items(
+            Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+        ).default([])
+    })
+
+    try {
+        await correctCondition.validateAsync(req.body, { abortEarly: false, allowUnknown: true })
+        //Validate dữ liệu thành công, tiếp tục xử lý
+        next()
+    } catch (error) {
+
+        next(new ApiError(StatusCodes.BAD_REQUEST, new Error(error).message))
+    }
+
+}
+
+const moveCardToDifferentColumn = async (req, res, next) => {
+    const correctCondition = Joi.object({
+        currentCardId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
+        prevColumnId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
+        nextColumnId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
+        prevCardOrderIds: Joi.array().items(
+            Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+        ).default([]),
+        nextCardOrderIds: Joi.array().items(
+            Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+        ).default([])
+    })
+
+    try {
+
+        await correctCondition.validateAsync(req.body, { abortEarly: false, allowUnknown: true })
+        //Validate dữ liệu thành công, tiếp tục xử lý
+        next()
+    } catch (error) {
+
+        next(new ApiError(StatusCodes.BAD_REQUEST, new Error(error).message))
+    }
+
+}
+
 export const boardValidation = {
-    createNew
+    createNew,
+    update,
+    moveCardToDifferentColumn
 }
